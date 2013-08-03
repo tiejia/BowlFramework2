@@ -1,0 +1,14 @@
+{%include file='html_blocks/global/header.html'%}
+        
+        <form method="POST" action="{%url controller=request action=index%}">
+           <input type="checkbox" name="check[]" value="<a href='b'>GGGG</a>"> A<br>
+            <input type="checkbox" name="check[]" value="0"> B<br>
+            <input type="checkbox" name="check[]" value="0"> C<br>
+            <input type="checkbox" name="check[]" value="0"> D<br>
+            <select name="select">
+                <option value="1">1</option>
+            </select>
+            <input type="submit" value="提交">
+        </form>
+        
+{%include file='html_blocks/global/footer.html'%}

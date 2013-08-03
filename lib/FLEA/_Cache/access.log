@@ -1,0 +1,20 @@
+[2010-08-17 16:37:42 0.11863800] ======= FleaPHP Loaded =======
+[2010-08-17 16:37:42] REQUEST_URI: /py-new/
+[2010-08-17 16:37:42] [exception] :FLEA_Exception_ExpectedClass: 文件 "Bee/Db/Factory.php" 中没有定义需要的类 "Bee_Db_Factory".
+[2010-08-17 16:37:42 0.13247200] ======= FleaPHP End (elapsed: 0.013834 seconds) =======
+
+[2010-08-17 16:39:31 0.78477700] ======= FleaPHP Loaded =======
+[2010-08-17 16:39:31] REQUEST_URI: /py-new/
+[2010-08-17 16:39:31] [exception] :FLEA_Exception_ExpectedClass: 文件 "Bee/Db/Factory.php" 中没有定义需要的类 "Bee_Db_Factory".
+[2010-08-17 16:39:31 0.79354600] ======= FleaPHP End (elapsed: 0.008769 seconds) =======
+
+[2010-08-17 16:56:29 0.80739300] ======= FleaPHP Loaded =======
+[2010-08-17 16:56:29] REQUEST_URI: /py-new/
+[2010-08-17 16:56:29] [exception] :FLEA_Exception_ExpectedClass: 文件 "Qu/Db/SqlHelper/Oracle.php" 中没有定义需要的类 "Qu_Db_SqlHelper_Oracle".
+[2010-08-17 16:56:29 0.81696300] ======= FleaPHP End (elapsed: 0.009570 seconds) =======
+
+[2010-08-17 17:06:31 0.02136400] ======= FleaPHP Loaded =======
+[2010-08-17 17:06:31] REQUEST_URI: /py-new/index.php?controller=test
+[2010-08-17 17:06:31] [exception] :FLEA_Exception_MissingController: 缺少控制器 "test".
+[2010-08-17 17:06:31 0.02765900] ======= FleaPHP End (elapsed: 0.006295 seconds) =======
+
