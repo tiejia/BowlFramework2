@@ -165,7 +165,7 @@ class Bowl_Assistant_Project{
             "name" => "gd",
             "module"=>"gd",
             "required" => false,
-            "desc" => "图片处理工具,目前逐步淘汰中",
+            "desc" => "图片处理工具,当使用验证码模块时必须安装",
         ),
 
     );

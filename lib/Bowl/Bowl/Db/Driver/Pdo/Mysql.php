@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . DS . "Abstract.php";
 
 class Bowl_Db_Driver_Pdo_Mysql extends Bowl_Db_Driver_Pdo_Abstract{
 
-	protected  $dsnFormat = "mysql:dbname=%s;host=%s";
+	protected  $dsnFormat = "mysql:dbname=%s;host=%s;port=%s";
 	protected  $limitQueryFormat = "%s LIMIT %s,%s";
     
     
@@ -32,7 +32,7 @@ class Bowl_Db_Driver_Pdo_Mysql extends Bowl_Db_Driver_Pdo_Abstract{
 		foreach($dsnArray as $key=>$value){
 			$this->{$key} = $value;
 		}
-		$this->dsn = sprintf($this->dsnFormat,$this->database,$this->hostspec);
+		$this->dsn = sprintf($this->dsnFormat,$this->database,$this->hostspec,$this->port);
 		return true;
     }
 

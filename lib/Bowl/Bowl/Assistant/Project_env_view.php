@@ -3,11 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>BowlFramework 运行环境</title>
-    <style>
-        table{
-
-        }
-    </style>
 </head>
 <body>
     <h1>BowlFramework运行环境信息</h1>
@@ -20,7 +15,7 @@
         </tr>
         <tr>
             <th>BowlFramework版本:</th>
-            <td><?php echo Bowl::version();?></td>
+            <td><?php echo Bowl::getVersion();?></td>
         </tr>
     </table>
     <hr>

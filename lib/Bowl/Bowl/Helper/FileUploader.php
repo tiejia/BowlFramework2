@@ -114,11 +114,10 @@ class Bowl_Helper_FileUploader{
             throw new Bowl_Helper_FileUploader_Exception("上传文件{$fileKey}发生错误：" . $uploadFile['error']);
         }
 
-        if ($uploadFile->getFileSize > $maxSize) {
+        if (!is_null($maxSize) && $uploadFile->getFileSize > $maxSize) {
             throw new Bowl_Helper_FileUploader_Exception("对不起，您上传的文件超出了指定大小");
         }
-
-        if (!empty($allowExt)&&!in_array($uploadFile->getFileExt, $allowExt)) {
+        if (!empty($allowExt)&&!in_array($uploadFile->getFileExt(), $allowExt)) {
             throw new Bowl_Helper_FileUploader_Exception("对不起，您上传的文件格式错误！");
         }
 

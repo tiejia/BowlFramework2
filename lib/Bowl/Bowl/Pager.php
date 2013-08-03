@@ -1,14 +1,11 @@
 <?php
 /**
- * 分页助手
- * 提供与框架相关联的分页支持
- *
- * @package Bowl_Helper
- * @version 2.1
- * @author zhaotiejia@ebupt.com
- */
-class Bowl_Helper_Pager{
-
+ * Bee Sliding方式分页类
+ * @desc 提供对数据分页
+ * @author tiejia
+ */ 
+ class Bowl_Pager{
+ 	
  	/**
  	 * 可以使用的配置信息
  	 * @var unknown_type
@@ -27,7 +24,7 @@ class Bowl_Helper_Pager{
  	 * @var unknown_type
  	 */
  	private $_currentPage = 1;
-
+ 	
  	/**
  	 * 页码显示的长度
  	 * @var unknown_type
@@ -78,22 +75,22 @@ class Bowl_Helper_Pager{
  	 * @var unknown_type
  	 */
  	private $_nextPageName = "下一页";
-
+ 	
  	/**
  	 * 分页数据
  	 * @var unknown_type
  	 */
  	private $_pager = array();
-
+ 	
  	/**
- 	 * 初始化分页工具
+ 	 * 初始化Sliding分页工具
  	 * @param $options
  	 * @return unknown_type
  	 */
  	function __construct($options=array()){
  		$this->setOptions($options);
  	}
-
+    
  	/**
  	 * 获取分页数据
  	 * @return unknown_type
@@ -101,9 +98,13 @@ class Bowl_Helper_Pager{
  	public function getPager(){
  		//计算总页数
  		$this->getTotalPage();
+
+
+
  		if($this->_totalPage==1||$this->_totalItems==0){
  			return false;
  		}
+ 		
  		//设置末页页码
  		$this->_lastPage = $this->_totalPage;
  		$pagerBody = $this->getPagerBody();
@@ -111,15 +112,16 @@ class Bowl_Helper_Pager{
  		$lastPager = $this->getLastPager();
  		$prePager = $this->getPrePager();
  		$nextPager = $this->getNextPager();
-
+ 		
  		return array(
+ 			"totalpage"=>$this->_totalPage,
  		    "firstpage"=>$firstPager,
  		    "prepage"=> $prePager,
  		    "pagebody"=>$pagerBody,
  		    "nextpage"=>$nextPager,
  		    "lastpage"=>$lastPager
  		);
-
+ 		
  	}
  	/**
  	 * 获取首页按钮
@@ -128,7 +130,7 @@ class Bowl_Helper_Pager{
     private function getFirstPager(){
     	$firstPager = array();
     	if($this->_currentPage==1||$this->_totalPage==1||$this->_pagerBodyLength>=$this->_totalPage){
-    	    $firstPager = array("uri"=>false);
+    	    $firstPager = array("uri"=>false);	
     	}else{
     		$firstPager = array("uri"=>$this->_url(1),"index"=>1);
     	}
@@ -141,7 +143,7 @@ class Bowl_Helper_Pager{
     private function getLastPager(){
     	$lastPager = array();
     	if($this->_currentPage==$this->_totalPage||$this->_totalPage==1||$this->_pagerBodyLength>=$this->_totalPage){
-    	    $lastPager = array("uri"=>false);
+    	    $lastPager = array("uri"=>false);	
     	}else{
     		$lastPager = array("uri"=>$this->_url($this->_totalPage),"index"=>$this->_totalPage);
     	}
@@ -190,7 +192,7 @@ class Bowl_Helper_Pager{
     	}
     	return $prePager;
     }
-
+    
  	/**
  	 * 获取总页数
  	 * @return unknown_type
@@ -202,44 +204,51 @@ class Bowl_Helper_Pager{
  			$this->_totalPage  = intval($this->_totalItems/$this->_perPage);
  		}
  	}
-
+ 	
  	/**
  	 * 获取主体页码
  	 * @return unknown_type
  	 */
  	private function getPagerBody(){
  	    $pagerBody = array();
- 	    $pageNum = intval($this->_pagerBodyLength/2);
-
- 	    $start = 1;
- 	    $end = $this->_pagerBodyLength;
- 	    if($this->_currentPage>$pageNum){
- 	    	$start = $this->_currentPage-$pageNum;
- 	    	$end = $this->_currentPage+$pageNum;
+ 	    if($this->_pagerBodyLength >= $this->_totalPage){
+ 	    	$ajustStart = 1;
+ 	    	$ajustEnd = $this->_totalPage;
+ 	    }else{
+ 	    	//偶数长度
+ 	    	if($this->_pagerBodyLength % 2 == 0){
+ 	    		$start = $this->_currentPage - intval($this->_pagerBodyLength/2)+1;
+ 	    		
+ 	    		$end =  $this->_currentPage + intval($this->_pagerBodyLength/2);
+ 	    		$ajustStart = $start;
+ 	    		$ajustEnd = $end;
+ 	    	}else{
+ 	    		$start = $this->_currentPage - intval($this->_pagerBodyLength/2);
+ 	    		$end = $this->_currentPage + intval($this->_pagerBodyLength/2);
+ 	    		$ajustStart = $start;
+ 	    		$ajustEnd = $end;
+ 	    	}  
+ 	    	//向右偏移
+ 	    	if($start <= 0){
+ 	    		$ajustEnd = $end - $start+1;
+ 	    		$ajustStart  = 1;
+ 	    	}
+ 	    	//向左偏移
+ 	    	if($end > $this->_totalPage){
+ 	    		$ajustStart = $start - ($end - $this->_totalPage);
+ 	    		$ajustEnd = $this->_totalPage;
+ 	    	}	
  	    }
-
- 	    if($end>$this->_totalPage){
- 	    	$start = $this->_totalPage - $this->_pagerBodyLength;
- 	    	$end = $this->_totalPage;
- 	    }
-
- 	    if($start<1){
- 	    	$start = 1;
- 	    }
- 	    if($end >$this->_totalPage){
- 	    	$end = $this->_totalPage;
- 	    }
-
- 	    for($i = $start;$i<=$end;$i++){
+ 	    for($i = $ajustStart;$i<=$ajustEnd;$i++){
  		    if($i==$this->_currentPage){
              	$pagerBody[]=array("uri"=>$this->_url($i),"current"=>true,"index"=>$i);
              }else{
                  $pagerBody[] = array("uri"=>$this->_url($i),"current"=>false,"index"=>$i);
-             }
+             } 	
 	 	}
  	    return $pagerBody;
  	}
-
+ 	
  	/**
  	 * 设置配置
  	 * @param $options
@@ -251,6 +260,7 @@ class Bowl_Helper_Pager{
                 $this->{'_' . $key} = $value;
             }
         }
-    }
- }
+    } 	
+ 	
+ } 
 ?>

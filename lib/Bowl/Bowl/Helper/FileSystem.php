@@ -48,13 +48,67 @@ class Bowl_Helper_FileSystem
 
     /**
      * 递归删除目录
-     *
+     *@TODO 将该方法加入到Bowl_Framework 发布版本中
      * @static
      *
      */
     static function rmdirs($dir)
     {
+        $dir = realpath($dir);
+        if ($dir == '' || $dir == '/' ||
+            (strlen($dir) == 3 && substr($dir, 1) == ':\\'))
+        {
+            // 禁止删除根目录
+            return false;
+        }
 
+        // 遍历目录，删除所有文件和子目录
+        if(false !== ($dh = opendir($dir))) {
+            while(false !== ($file = readdir($dh))) {
+                if($file == '.' || $file == '..') { continue; }
+                $path = $dir . DIRECTORY_SEPARATOR . $file;
+                if (is_dir($path)) {
+                    if (!self::rmdirs($path)) { return false; }
+                } else {
+                    unlink($path);
+                }
+            }
+            closedir($dh);
+            rmdir($dir);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 拷贝目录
+     *
+     * @param $source
+     * @param $destination
+     * @param bool $child
+     * @return bool
+     * @TODO 将该方法加入到BowlFramework的发布版本中
+     */
+    static function copyDirectory($source, $destination, $child = true)
+    {
+        if (!is_dir($source)) {
+            return false;
+        }
+        if (!is_dir($destination)) {
+            mkdir($destination, 0777);
+        }
+        $handle = dir($source);
+        while ($entry = $handle->read()) {
+            if (($entry != ".") && ($entry != "..")) {
+                if (is_dir($source . "/" . $entry)) {
+                    if ($child) self::copyDirectory($source . "/" . $entry, $destination . "/" . $entry, $child);
+                } else {
+                    copy($source . "/" . $entry, $destination . "/" . $entry);
+                }
+            }
+        }
+        return true;
     }
 
     /**

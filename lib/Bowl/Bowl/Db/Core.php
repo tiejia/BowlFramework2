@@ -42,7 +42,6 @@ class Bowl_Db_Core{
         if(!is_array($dsn)||!is_array($config)){
             throw new Bowl_Db_Exception("错误的DSN配置！");
         }
-        
         if(isset($config['BOWL_DB_DEBUG'])){
             $this->debug =  is_bool($config['BOWL_DB_DEBUG'])?$config['BOWL_DB_DEBUG']:true;
         }
@@ -403,11 +402,13 @@ class Bowl_Db_Core{
         return $results;
         }catch(PDOException $e){
             log_message($e->getMessage(),"error","DBExcepiton");
-            if(BOWL_RUN_MODE == "debug"){
-                die("操作数据库时发生错误：".$e->getMessage()."<br>详情请查看日志文件");
-            }else{
-                die("系统繁忙，请稍后重试！");
-            }
+            //统一数据库层错误处理方式为异常
+            throw new Bowl_Db_Exception($e->getMessage());
+//            if(BOWL_RUN_MODE == "debug"){
+//                die("操作数据库时发生错误：".$e->getMessage()."<br>详情请查看日志文件");
+//            }else{
+//                die("系统繁忙，请稍后重试！");
+//            }
         }
     }
 
@@ -434,3 +435,4 @@ class Bowl_Db_Core{
         }
     }
 }
+
